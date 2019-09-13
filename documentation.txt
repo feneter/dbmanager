@@ -1,0 +1,92 @@
+    --------------------DBMANAGER EXPLAINED--------------------
+
+    the program should be able to :
+    create new table with optinal number of column and names as well
+    modify any data from any table
+        -insert
+        -update
+        -delete
+    retrive data // read all table details and display them
+
+    program deal with simple data only for storing ,modifying ,displaying
+
+
+    Tools:
+    from database:
+        -sqlite 3
+    graphics user interphace:
+        -pyqt5
+    coding language:
+        -python
+
+    GUI:
+    1-main window:
+    2-create window:
+    3-modification window:
+
+#Main Window:
+    -search field:
+        quick search for the table name ,and results will be displayed on the text fied beanth it and when target table clicked
+        the table details are displayed onto the same text field.this will give user option to edit the table contents
+    - text field:
+        this serve as mult-purpose filed to display various contents
+            -search results
+            -table contents
+    - Buttons section:
+        1.Edit Button
+            this edit specific table selected on view
+            button opens modification window to edit pesent table
+        2.Delete Table button:
+            this button deletes target table on view completly
+        3.create table button:
+            creates new table and this opens creation window
+        4.Open button:
+            this direct user to open table form database folder list
+
+#Create Window:
+    this displas when create table button is clicked from main window.
+    widgets:
+    *Initial information
+        Table Name:riceve new table name
+        columns number:receive number of columns
+        submit button: when clicked open culmns field according to the number of columns given
+
+    *Culmns field
+        this receive user columns according to the number given by user
+
+    *create button 
+        this receive all data given by user and open modification window under create mode
+
+#Modification Window:
+    this has two modes:
+        -Edit mode.
+        -Create mode.
+    
+*Edit mode:
+    this opens when user clicks edit button on main window
+    widgets:
+    -serch section
+    receive unique entity by detail of forst column from any row of target table
+    when search button is clicked it displays deatails of all row vs column acodingly
+    if detail given does not match will throw error message
+
+    -message field
+    this give errormessage to the user base on search
+
+    -display field
+    this present colmn name against value of targeted item(row) fro the table
+    here one can edit data into field ant submit changes to database
+
+    -buttons field
+    1.delete button - deletes row on serch results with all contents
+    2.update button- receive change from display field and push changes to the data base
+    4.cancle button - this cancel editing window and return to the main window
+
+*Create mode:
+    this opens when the create button is clicked from the crieation window
+    
+
+
+
+    
+    
