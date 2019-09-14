@@ -21,55 +21,58 @@ OOP2
   double underscore like ``__name``.
 
 .. topic:: Getters
+    
     Methods we use to access property values from class
     In python they are decorated with @property.
     Having ``@property`` on a method will make it a property which will also be assignable
 
-    .. code:: python
+.. code:: python
 
-        class Student:
-            def __init__(self):
-                self._name = "Student1
+    class Student:
+        def __init__(self):
+            self._name = "Student1
 
-            @property
-            def name(self):
-                return self._name
+        @property
+        def name(self):
+            return self._name
 
-        student = Student()
-        print(student.name)
+    student = Student()
+    print(student.name)
     
-    Without the @property decorator we would have used
+    # Without the @property decorator we would have used
 
-    ..code:: python
+..code:: python
 
-        print(student.name())
+    print(student.name())
 
 .. topic:: Setters
+    
     Methods we use to assign new values
 
-    .. code:: python
-        class Student:
-            def __init__(self):
-                self._name = "Student1
+.. code:: python
+    
+    class Student:
+        def __init__(self):
+            self._name = "Student1
 
-            @property
-            def name(self):
-                return self._name
+        @property
+        def name(self):
+            return self._name
 
-            @name.setter
-            def name(self, new_name):
-                self._name = new_name.capitalize if new_name.startswith('j') else new_name.upper() # name is now changed
+        @name.setter
+        def name(self, new_name):
+            self._name = new_name.capitalize if new_name.startswith('j') else new_name.upper() # name is now changed
 
-    To change the name on the student object we will do
+        # To change the name on the student object we will do
 
-    ..code:: python
+..code:: python
 
-        student = Student()
-        student.name = "Baharia"
+    student = Student()
+    student.name = "Baharia"
 
-        # Without the @name.setter decorator we would have used
+    # Without the @name.setter decorator we would have used
 
-        student.name("Baharia")
+    student.name("Baharia")
 
     The setter case here is only used for demonstration. You will want a setter When
     you have a condition or other checks when assigning the new value.
