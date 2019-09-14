@@ -78,3 +78,12 @@ OOP2
 
     The setter case here is only used for demonstration. You will want a setter When
     you have a condition or other checks when assigning the new value.
+
+
+OOP3
+++++
+
+Break this further down and create separate classes for pushbuttons, layouts, and other common widgets
+that you use.
+This way, you can abstract out a lot of common/repeating operations and have the final dbmanager class
+very small, manageable and easier to debug 
