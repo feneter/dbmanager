@@ -87,3 +87,19 @@ Break this further down and create separate classes for pushbuttons, layouts, an
 that you use.
 This way, you can abstract out a lot of common/repeating operations and have the final dbmanager class
 very small, manageable and easier to debug 
+
+* We create a Form (custom) widget that will have its own layout to which we add elements (widgets).
+  This widget is responsible for handling elements added to it
+* The custom widgets have convenient properties, like, row, cols, col_span and row_span so the layout knows
+  where to place them
+* We create a layout that is smart enough to read where to place elements added to it.
+
+In ``def Main_window()`` we add Form widgets to hold the search form, and another form to hold the list view and the three butons
+View Table, Open and Create Table
+
+In ``def createtable_window() self.sub_widget1`` was replaced by ``self.landing_page_form`` and 
+we replace ``self.sub_widget2`` with ```self.create_table_form``
+
+1. We can remove the new search form in ``modify_window`` and use the one created in ``def InitUI(self)``
+2. We will put the the condition under ``if self.edit`` into its own function and same for ``elif self.create``
+3. ``def pick_db_file()`` should be a method of dbsource and ``pick_db_file`` in dbmanager will be changed to a ``@property databases_popup``

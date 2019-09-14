@@ -16,3 +16,7 @@ class PushButton(QPushButton):
 
     def hide(self):
         self.setGeometry()
+
+    @property
+    def click_slot(self, slot):
+        self.clicked.connect(slot)

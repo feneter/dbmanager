@@ -2,7 +2,6 @@ import sqlite3
 import os
 from PyQt5.QtWidgets import QFileDialog
 
-
 class DBSource:
     """API class for the database
     Can be used to create new tables, and perform all CRUD operation on a database
@@ -12,12 +11,12 @@ class DBSource:
     """
 
     def __init__(self, filename=""):
-        self.using_database = filename if filename else "Example.db"
+        self.using_database = filename if filename else ":memory:"
         self.connection = sqlite3.connect(self.using_database)
         self.cursor = self.connection.cursor()
         self.container = []
         self.ss = []
-        self.create_table('Students_Data' ,'Name','ID', "Age", "Major")
+        # self.create_table('Students_Data' ,'Name','ID', "Age", "Major")
 
     def change_db(self, change_to_db):
         """Anytime the database changes, we also need to change the cursor
@@ -68,7 +67,7 @@ class DBSource:
         Name is required
         """
         with self.connection:
-            self.cursor.execute("DELETE FROM Students_Data WHERE  Name={}",(StudentName,))
+            self.cursor.execute("DELETE FROM Students_Data WHERE  Name=?",(StudentName,))
     
     #  UPDATE data
     def update_data(self, studentObject,OldName):
@@ -77,7 +76,8 @@ class DBSource:
         Expects a student object and an old name
         """
         with self.connection:
-            self.cursor.execute("UPDATE Students_Data SET Name={},Id={},Age={},Major={} WHERE  Name={}",(studentObject.Name,studentObject.Id,studentObject.Age,studentObject.Major,OldName))
+            self.cursor.execute("UPDATE Students_Data SET Name=?,Id=?,Age=?,Major=? WHERE  Name=?",
+                (studentObject.Name,studentObject.Id,studentObject.Age,studentObject.Major,OldName))
                                         
     #  SELECT only one item 
     def select_one(self, StudentName ,Particular):
@@ -86,7 +86,7 @@ class DBSource:
         Returns a list with one or no element
         """
         with self.connection:
-            self.cursor.execute("SELECT {} FROM Students_Data WHERE Name={}",(Particular,StudentName))
+            self.cursor.execute("SELECT ? FROM Students_Data WHERE Name=?",(Particular,StudentName))
             return self.cursor.fetchall() # expected this to return just one. like fetchone
 
     #select all data
@@ -113,3 +113,9 @@ class DBSource:
         with self.connection:
             for f in self.cursor.execute("SELECT * FROM Students_Data "):
                 self.ss.append(f)
+
+    #this picks datbase file thart exist in databse folder
+    @property
+    def available_databases(self):
+        import glob
+        return glob.glob('*.db')

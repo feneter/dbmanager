@@ -2,8 +2,10 @@
 from PyQt5.QtWidgets import QLineEdit
 
 class LineEdit(QLineEdit):
-    def __init__(self, parent, row=0, col=0, row_span=0, col_span=0):
+    def __init__(self, parent, row=0, col=0, row_span=0, col_span=0, text=""):
         super().__init__()
+        if text:
+            self.setText(text)
         self.row = row
         self.col = col
         self.row_span = row_span

@@ -5,7 +5,7 @@ from widgets.push_button import PushButton
 from widgets.grid_layout import GridLayout
 
 class Form(QWidget):
-    def __init__(self, parent, show_primary_buttons=True):
+    def __init__(self, parent, show_primary_buttons=False):
         super().__init__()
         self.setParent(parent)
         self.next_row = 0
@@ -25,6 +25,10 @@ class Form(QWidget):
         if self.show_buttons:
             self.update_clear_submit_button_location()
     
+    def add_elements(self, *elements):
+        for element in elements:
+            self.add_element(element)
+
     def update_clear_submit_button_location(self):
         self.clear_button.row = self.layout.rowCount()
         self.submit_button.row = self.layout.rowCount()
@@ -34,3 +38,6 @@ class Form(QWidget):
     def show_primary_buttons(self):
         self.show_buttons = True
         self.update_clear_submit_button_location()
+
+    def add_layout(self, layout):
+        self.layout.add_layout(layout)
