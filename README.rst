@@ -39,7 +39,7 @@ OOP2
     student = Student()
     print(student.name)
     
-    # Without the @property decorator we would have used
+# Without the @property decorator we would have used
 
 .. code:: python
 
@@ -64,7 +64,7 @@ OOP2
         def name(self, new_name):
             self._name = new_name.capitalize if new_name.startswith('j') else new_name.upper() # name is now changed
 
-        # To change the name on the student object we will do
+# To change the name on the student object we will do
 
 
 .. code:: python
