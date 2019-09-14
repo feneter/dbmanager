@@ -27,7 +27,8 @@ class DBManager(QWidget ):
         self.main_layout=QVBoxLayout(self)
         self.Main_window()
         self.setGeometry(500,500,500,300)
-        self.setWindowTitle('Students_Data')
+        self.setWindowTitle("Students Data")
+        self.updateWindowTitle()
         self.tempo_dict={}
         self.show()           
 
@@ -47,17 +48,14 @@ class DBManager(QWidget ):
         self.results=QListWidget(self)
         grid.addWidget(self.results, 1,0,1,2)
 
-        view_btn=QPushButton("View Table",self)
-        view_btn.clicked.connect(self.modify_window)
+        view_btn=self.create_button("View Table", self.modify_window)
         grid.addWidget(view_btn, 2,0)
         
-        self.open_btn=QPushButton("Open",self)
+        self.open_btn = self.create_button("Open",self.pick_db_file)
         self.open_btn.setMenu(self.menu)
-        self.open_btn.clicked.connect(self.pick_db_file)
         grid.addWidget(self.open_btn, 2,1)
 
-        crt_btn=QPushButton("Create Table",self)
-        crt_btn.clicked.connect(self.createtable_window)
+        crt_btn=self.create_button("Create Table", self.createtable_window)
         grid.addWidget(crt_btn, 3,0)
 
             
@@ -119,25 +117,14 @@ class DBManager(QWidget ):
             self.Notice=QLabel("NOTE:",self)
             Glayout.addWidget(self.Notice, 1,1)
 
-            Lname=QLabel("Name:",self)
-            Glayout.addWidget(Lname, 2,0)
-            self.SName=QLineEdit(self)
-            Glayout.addWidget(self.SName, 2,1)
-
-            Lid=QLabel("ID:",self)
-            Glayout.addWidget(Lid, 3,0)
-            self.SId=QLineEdit(self)
-            Glayout.addWidget(self.SId, 3,1)
-
-            Lage=QLabel("Age",self)  
-            Glayout.addWidget(Lage, 4,0)  
-            self.SAge=QLineEdit(self)
-            Glayout.addWidget(self.SAge ,4,1)
-
-            Lmajor=QLabel("Major:", self)
-            Glayout.addWidget(Lmajor, 5,0)
-            self.SMajor=QLineEdit(self)
-            Glayout.addWidget(self.SMajor, 5,1)
+            self.add_widget_to_grid_layout(QLabel("Name:",self), Glayout, 2, 0)
+            self.add_widget_to_grid_layout(QLineEdit(self), Glayout, 2, 1)
+            self.add_widget_to_grid_layout(QLabel("ID:",self), Glayout, 3, 0)
+            self.add_widget_to_grid_layout(QLineEdit(self), Glayout, 3, 1)
+            self.add_widget_to_grid_layout(QLabel("Age",self), Glayout, 4,0)  
+            self.add_widget_to_grid_layout(QLineEdit(self), Glayout, 4, 1)
+            self.add_widget_to_grid_layout(QLabel("Major:", self), Glayout, 5,0)
+            self.add_widget_to_grid_layout(QLineEdit(self), Glayout, 5, 1)
             num=5
         #create mode in modification window
         elif self.create:
@@ -148,16 +135,22 @@ class DBManager(QWidget ):
             num=int(self.col_no.text())+1
 
         #modification window buttons
-        self.Submitbtn=QPushButton("Submit",self)
-        self.Submitbtn.clicked.connect(self.get_new_data)
-        Glayout.addWidget(self.Submitbtn, num,0)
-        Deletebtn=QPushButton("Delete",self)
-        Deletebtn.clicked.connect(self.delete_all_data)
-        Glayout.addWidget(Deletebtn, num,1)
-        Cancelbtn=QPushButton("Cancel",self)
-        Cancelbtn.clicked.connect(self.cancel_operation)
-        Glayout.addWidget(Cancelbtn, num,2)
+        self.Submitbtn = self.create_button("Submit", self.get_new_data)
+        Deletebtn = self.create_button("Delete", self.delete_all_data)
+        Cancelbtn = self.create_button("Cancel", self.cancel_operation)
         self.tempo_dict.clear()
+        self.add_widget_to_grid_layout(self.Submitbtn, Glayout, num, 0)
+        self.add_widget_to_grid_layout(Cancelbtn, Glayout, num, 2)
+        self.add_widget_to_grid_layout(Deletebtn, Glayout, num, 1)
+        
+    def add_widget_to_grid_layout(self, widget, grid, row, col, row_span=0, col_span=0):
+        """helper method to add widgets to grid layout"""
+        grid.addWidget(widget, row, col)
+
+    def create_button(self, label, slot):
+        btn = QPushButton(label, self)
+        btn.clicked.connect(slot)
+        return btn
 
     #this picks datbase file thart exist in databse folder
     def pick_db_file(self):
@@ -173,6 +166,7 @@ class DBManager(QWidget ):
     def pull_dbfile(self):
         source=self.sender() # origin of signal
         self.dbsource.change_db(source.text())
+        self.updateWindowTitle()
         self.Present_Table()
 
     #this pick new data from edit window 
@@ -280,6 +274,10 @@ class DBManager(QWidget ):
             field.clear()
                 
 
+    def updateWindowTitle(self):
+        win_title =self.windowTitle()
+        new_title = f"{win_title.split(' - ')[0]} - {self.dbsource.using_database}"
+        self.setWindowTitle(new_title)
 
 if __name__=='__main__':
     app=QApplication(sys.argv)

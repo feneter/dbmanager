@@ -12,8 +12,8 @@ class DBSource:
     """
 
     def __init__(self, filename=""):
-        self._using_database = filename if filename else "Example.db"
-        self.connection = sqlite3.connect(self._using_database)
+        self.using_database = filename if filename else "Example.db"
+        self.connection = sqlite3.connect(self.using_database)
         self.cursor = self.connection.cursor()
         self.container = []
         self.ss = []
@@ -22,8 +22,11 @@ class DBSource:
     def change_db(self, change_to_db):
         """Anytime the database changes, we also need to change the cursor
         """
+        self.using_database = change_to_db
         self.connection = sqlite3.connect(change_to_db)
         self.cursor = self.connection.cursor()
+        # for the sake of this, let's also make sure we have the table in this db too
+        self.create_table('Students_Data' ,'Name','ID', "Age", "Major")
 
     # CREATE  TABLE /general base on user options
     # You would usually run statements to create database only once, or when you upgrade
@@ -95,7 +98,7 @@ class DBSource:
         Returns a list of all matching records found
         """
         with self.connection:
-            self.cursor.execute("SELECT * FROM Students_Data WHERE Name={}",(StudentName,))
+            self.cursor.execute("SELECT * FROM Students_Data WHERE Name=?",(StudentName,))
             for item in  self.cursor.fetchall() :
                 for detail in item:
                     self.container.append(detail)
