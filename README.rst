@@ -41,9 +41,10 @@ OOP2
     
     # Without the @property decorator we would have used
 
-..code:: python
+.. code:: python
 
     print(student.name())
+
 
 .. topic:: Setters
     
@@ -65,7 +66,8 @@ OOP2
 
         # To change the name on the student object we will do
 
-..code:: python
+
+.. code:: python
 
     student = Student()
     student.name = "Baharia"
