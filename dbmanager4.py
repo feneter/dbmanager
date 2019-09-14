@@ -116,15 +116,19 @@ class DBManager(QWidget ):
         if self.edit:
             self.Notice=QLabel("NOTE:",self)
             Glayout.addWidget(self.Notice, 1,1)
-
-            self.add_widget_to_grid_layout(QLabel("Name:",self), Glayout, 2, 0)
-            self.add_widget_to_grid_layout(QLineEdit(self), Glayout, 2, 1)
-            self.add_widget_to_grid_layout(QLabel("ID:",self), Glayout, 3, 0)
-            self.add_widget_to_grid_layout(QLineEdit(self), Glayout, 3, 1)
-            self.add_widget_to_grid_layout(QLabel("Age",self), Glayout, 4,0)  
-            self.add_widget_to_grid_layout(QLineEdit(self), Glayout, 4, 1)
-            self.add_widget_to_grid_layout(QLabel("Major:", self), Glayout, 5,0)
-            self.add_widget_to_grid_layout(QLineEdit(self), Glayout, 5, 1)
+            self.SName = QLineEdit(self)
+            self.SId = QLineEdit(self)
+            self.SAge = QLineEdit(self)
+            self.SMajor = QLineEdit(self)
+            self.College = QLineEdit(self)
+            form_elements = [("Name", self.SName), ("College", self.College), ("ID", self.SId), ("Age", self.SAge), ("Major", self.SMajor)]
+            row = 2
+            for element in form_elements: 
+                label, field = element    
+                self.add_widget_to_grid_layout(QLabel(label, self), Glayout, row, 0)
+                self.add_widget_to_grid_layout(field, Glayout, row, 1)
+                row += 1
+            
             num=5
         #create mode in modification window
         elif self.create:
