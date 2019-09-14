@@ -7,7 +7,12 @@ import os
 import re
 import time
 from PyQt5.QtCore import QTimer
-from PyQt5.QtWidgets import QMainWindow,QFormLayout,QAction,QDialog,QFileDialog,QFormLayout,QTextEdit,QListWidget,QLabel,QMenu,QWidget,QHBoxLayout,QLineEdit,QApplication,QVBoxLayout,QPushButton,qApp,QMenu,QGroupBox,QGridLayout
+# organize imports. you can use a tuple, at least
+from PyQt5.QtWidgets import (
+    QMainWindow, QFormLayout,QAction,QDialog,QFileDialog,QFormLayout,
+    QTextEdit,QListWidget,QLabel,QMenu,QWidget,QHBoxLayout,QLineEdit,
+    QApplication,QVBoxLayout,QPushButton,qApp,QMenu,QGroupBox,
+    QGridLayout)
 
 from dbsource2 import DBSource
 from student import Student
