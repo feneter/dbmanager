@@ -16,6 +16,10 @@ from PyQt5.QtWidgets import (
 
 from dbsource2 import DBSource
 from student import Student
+from widgets.push_button import PushButton
+from widgets.grid_layout import GridLayout
+from widgets.line_edit import LineEdit
+from widgets.form import Form
 
 class DBManager(QWidget ):
     def __init__(self):
@@ -30,30 +34,34 @@ class DBManager(QWidget ):
         self.setWindowTitle("Students Data")
         self.updateWindowTitle()
         self.tempo_dict={}
-        self.show()           
-
+        self.show()
+                
 
     #main window
     def Main_window(self):
+        self.search_form = Form(self, show_primary_buttons=False)
+        self.main_layout.addWidget(self.search_form)
+
         self.sub_widget1=QWidget(self)
-        grid=QGridLayout(self)
+        grid=GridLayout(self)
         self.add_widget(self.sub_widget1,grid)
         
-        srch_bar=QLineEdit(self)
-        grid.addWidget(srch_bar, 0,0)
+        srch_bar=LineEdit(self, 0, 0)
+        self.search_form.add_element(srch_bar)
         self.pick_db_file()
-        srch_btn=QPushButton("Search",self)
-        grid.addWidget(srch_btn, 0,1)
+        srch_btn=PushButton("Search", self, 0, 1)
+        self.search_form.add_element(srch_btn)
+
 
         self.results=QListWidget(self)
         grid.addWidget(self.results, 1,0,1,2)
 
-        view_btn=self.create_button("View Table", self.modify_window)
-        grid.addWidget(view_btn, 2,0)
+        view_btn=PushButton("View Table", self,  click_slot= self.modify_window, col=0, row=2,)
+        grid.add_widget(view_btn)
         
-        self.open_btn = self.create_button("Open",self.pick_db_file)
+        self.open_btn = PushButton("Open",self, click_slot=self.pick_db_file, row=2, col=1)
         self.open_btn.setMenu(self.menu)
-        grid.addWidget(self.open_btn, 2,1)
+        grid.add_widget(self.open_btn)
 
         crt_btn=self.create_button("Create Table", self.createtable_window)
         grid.addWidget(crt_btn, 3,0)
@@ -170,6 +178,7 @@ class DBManager(QWidget ):
     def pull_dbfile(self):
         source=self.sender() # origin of signal
         self.dbsource.change_db(source.text())
+        self.search_form.show_primary_buttons()
         self.updateWindowTitle()
         self.Present_Table()
 
