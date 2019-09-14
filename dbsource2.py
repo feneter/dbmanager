@@ -113,5 +113,3 @@ class DBSource:
         with self.connection:
             for f in self.cursor.execute("SELECT * FROM Students_Data "):
                 self.ss.append(f)
-                
-

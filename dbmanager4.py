@@ -58,7 +58,7 @@ class DBManager(QWidget ):
         crt_btn=self.create_button("Create Table", self.createtable_window)
         grid.addWidget(crt_btn, 3,0)
 
-            
+
     #createtable window
     def createtable_window(self):
 

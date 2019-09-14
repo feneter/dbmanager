@@ -72,7 +72,7 @@ OOP2
     student = Student()
     student.name = "Baharia"
 
-    # Without the @name.setter decorator we would have used
+# Without the @name.setter decorator we would have used
 
     student.name("Baharia")
 
