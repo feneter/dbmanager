@@ -12,11 +12,12 @@ class student:
     
     @property
     def Name(self):
-        return self._Name
+        return self.__Name
     
     @Name.setter
     def Name(self,name):
         self.__Name=name.capitalize()
+
 
     @property
     def Major(self):

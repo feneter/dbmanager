@@ -16,7 +16,7 @@ from PyQt5.QtWidgets import (QMainWindow,QFormLayout,QAction,QDialog,
 
 from dbsource2 import DBsource
 from student import student
-from widgets.grid_layout import GridLayout
+from widgets.grid_layout import Gridlayout
 from widgets.form import Form
 from widgets.form_layout import Formlayout
 from widgets.push_btn import Pushbutton
@@ -24,6 +24,8 @@ from widgets.line_edit import Linedit
 from widgets.label import Label
 from widgets.horizontal_layout import HorizontalLayout
 from widgets.list_widget import Listwidget
+from student_form import studentForm
+from custom_form import userForm
 
 
 class db_source(QWidget ):
@@ -34,8 +36,11 @@ class db_source(QWidget ):
             self.initUI()
         def initUI(self):
             self.main_layout=QVBoxLayout(self)
-            self.main_layout.addWidget(self.search_form())
+            self.searchForm=self.search_form()
+            self.main_layout.addWidget(self.searchForm)
             self.Main_window()
+            self.user=userForm
+            self.student_form=studentForm()
             self.setGeometry(500,500,500,300)
             self.setWindowTitle('Students_Data')
             self.tempo_dict={}
@@ -58,16 +63,17 @@ class db_source(QWidget ):
             
 #createtable window
         def createtable_window(self):
-            self.hide_widget(self.search_form())
+            self.hide_widget(self.searchForm)
             self.hide_widget(self.landing_page_form)
-            self.col_input_form=Form(self,show_primary_buttons=False)
-            self.main_layout.addWidget(self.col_input_form)
-            label1=Label(self,"Enter table name:",1,0)
-            self.tabelname_new=Linedit(self,1,1)
-            label2=Label(self,"Number of columns",2,0)
-            self.col_no=Linedit(self,2,1)
-            self.submit_btn=Pushbutton("Submit",self,3,1,click_slot=self.get_columns)
-            self.col_input_form.add_elements(label1,self.tabelname_new,label2,self.col_no,self.submit_btn)
+            self.user.get_columns_number(self,self.main_layout,self.user.dropdown_cols)
+            # self.col_input_form=Form(self,show_primary_buttons=False)
+            # self.main_layout.addWidget(self.col_input_form)
+            # label1=Label(self,"Enter table name:",1,0)
+            # self.tabelname_new=Linedit(self,1,1)
+            # label2=Label(self,"Number of columns",2,0)
+            # self.col_no=Linedit(self,2,1)
+            # self.submit_btn=Pushbutton("Submit",self,3,1,click_slot=self.get_columns)
+            # self.col_input_form.add_elements(label1,self.tabelname_new,label2,self.col_no,self.submit_btn)
 
         def load_user_form(self):
             self.get_user_columns()
@@ -79,39 +85,12 @@ class db_source(QWidget ):
                 self.user_form.addRow(Label(self,value),Linedit(self,row=row,col=1))
                 row+=1
             self.main_layout.addLayout(self.user_form)
-            self.btn_box=HorizontalLayout(self)
-            self.btns()
-            self.btn_box.add_elements(self.submit,self.delete,self.cancel)
             self.main_layout.addLayout(self.btn_box)
                       
         def load_student_form(self):
             self.hide_widget(self.landing_page_form)
-            self.student_form=Form(self)
-            self.Notice=Label(self,"information",row=0,col=0)
-            self.student_form.add_element(self.Notice)
-
-            self.name=Linedit(self,row=1,col=1)
-            self.id=Linedit(self,row=2,col=1)
-            self.age=Linedit(self,row=3,col=1)
-            self.major=Linedit(self,row=4,col=1)
-            self.student_form.add_elements(self.name,self.id,self.age,self.major)
-            labels=["Name","Id","Age","Major"]
-            for row,label in enumerate(labels,start=1):
-                self.student_form.add_element(Label(self,label,row=row,col=0))
-            self.student_form.add_layout(self.student_form_buttons())
-            self.main_layout.addWidget(self.student_form)
-
-        def student_form_buttons(self):
-            button_layout=HorizontalLayout(row=5,row_span=1,col_span=2)
-            self.btns()
-            button_layout.add_elements(self.submit,self.delete,self.cancel)
-            return button_layout
-
-        def btns(self):
-            self.submit=Pushbutton("submit",self,click_slot=self.get_new_data)
-            self.delete=Pushbutton("Delete",self,click_slot=self.delete_all_data)
-            self.cancel=Pushbutton("Cancel",self,click_slot=self.cancel_operation)
-
+            self.student_form.set_student_form(self.main_layout)
+            self.student_form.set_form_buttons(self.main_layout,self.Update_chages,self.delete_all_data,self.cancel_operation)
 
         def add_widget_to_grid_layout(self,grid,element,row,col):
             """add any widget to respective gridlayout
@@ -257,7 +236,7 @@ class db_source(QWidget ):
             win_title=self.windowTitle()
             new_title=f"{win_title.split('-')[0]}-{self.dbsource.using_db}"
             self.setWindowTitle(new_title)
-               
+             
         def search_form(self):
             search_form=Form(self,show_primary_buttons=False)
             self.srch_name=Linedit(self,0,0)

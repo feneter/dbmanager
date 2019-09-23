@@ -55,6 +55,19 @@ class DBsource:
                 """
                 with self.connection:
                         self.cursor.execute("INSERT INTO Students_Data VALUES(?,?,?,?)",(studentObject.Name,studentObject.Id,studentObject.Age,studentObject.Major))
+        
+        def insert_data_general(self,tablename,*objects):
+                """general purpose function for inserting data into database
+
+                pass object(list of values) and it's tablename
+                """
+                statement="(INSERT INTO {} Values {}"
+                for object in objects:
+                        statement+=",{}"
+                statement+=")"
+                query=statement.format(*object)   
+                with self.connection:
+                        self.cursor.execute(query)
 
         def delete_data_Name(self,StudentName):
                 """DELETE data from database
@@ -63,6 +76,14 @@ class DBsource:
                 """
                 with self.connection:
                         self.cursor.execute("DELETE FROM Students_Data WHERE  Name=(?)",(StudentName,))
+
+        def delete_data_general(self,tablename,columnname,particular):
+                """ deletes Data from any table targeted using first column detail
+
+                pass tablename
+                """
+                with self.connection:
+                        self.cursor.execute("DELETE FROM (?) WHERE (?)=(?)",(tablename,columnname,particular))
 
         def Update_data(self,studentObject,OldName):
                 """UPDATE data in database

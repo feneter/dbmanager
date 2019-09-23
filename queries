@@ -1,0 +1,12 @@
+new_title = f"{win_title.split(' - ')[0]} - {self.dbsource.using_database}"
+cancle operation function has bugs
+@property
+self.dbsource=DBsource().....not function why
+
+pushbtn.py
+@property
+self click_slot
+
+dbsource2.py
+available data base 
+import glob
