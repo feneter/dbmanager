@@ -33,14 +33,15 @@ class db_source(QWidget ):
 
             super().__init__()
             self.dbsource=DBsource()
-            self.initUI()
-        def initUI(self):
             self.main_layout=QVBoxLayout(self)
+            self.user=userForm(self.main_layout)
+            self.student=studentForm(self.main_layout)
+            self.initUI()
+
+        def initUI(self):
             self.searchForm=self.search_form()
             self.main_layout.addWidget(self.searchForm)
             self.Main_window()
-            self.user=userForm
-            self.student_form=studentForm()
             self.setGeometry(500,500,500,300)
             self.setWindowTitle('Students_Data')
             self.tempo_dict={}
@@ -52,7 +53,7 @@ class db_source(QWidget ):
         def Main_window(self):
             self.landing_page_form= Form(self)
             self.results=Listwidget(self,row=1,col=0,row_span=1,col_span=2)
-            view_btn=Pushbutton("view table",self,2,0,click_slot=self.load_student_form)
+            view_btn=Pushbutton("view table",self,2,0,click_slot=self.default_form)
             self.open_btn=Pushbutton("open",self,2,1)
             self.open_btn.setMenu(self.databases_popup())
             create_btn=Pushbutton("create table",self,3,0,click_slot=self.createtable_window)
@@ -65,46 +66,18 @@ class db_source(QWidget ):
         def createtable_window(self):
             self.hide_widget(self.searchForm)
             self.hide_widget(self.landing_page_form)
-            self.user.get_columns_number(self,self.main_layout,self.user.dropdown_cols)
-            # self.col_input_form=Form(self,show_primary_buttons=False)
-            # self.main_layout.addWidget(self.col_input_form)
-            # label1=Label(self,"Enter table name:",1,0)
-            # self.tabelname_new=Linedit(self,1,1)
-            # label2=Label(self,"Number of columns",2,0)
-            # self.col_no=Linedit(self,2,1)
-            # self.submit_btn=Pushbutton("Submit",self,3,1,click_slot=self.get_columns)
-            # self.col_input_form.add_elements(label1,self.tabelname_new,label2,self.col_no,self.submit_btn)
-
-        def load_user_form(self):
-            self.get_user_columns()
-            self.hide_widget(self.col_input_form)
-            self.hide_widget(self.column_names_form)
-            self.user_form=QFormLayout(self)
-            row=0
-            for key,value in self.tempo_dict.items():
-                self.user_form.addRow(Label(self,value),Linedit(self,row=row,col=1))
-                row+=1
-            self.main_layout.addLayout(self.user_form)
-            self.main_layout.addLayout(self.btn_box)
-                      
-        def load_student_form(self):
-            self.hide_widget(self.landing_page_form)
-            self.student_form.set_student_form(self.main_layout)
-            self.student_form.set_form_buttons(self.main_layout,self.Update_chages,self.delete_all_data,self.cancel_operation)
-
-        def add_widget_to_grid_layout(self,grid,element,row,col):
-            """add any widget to respective gridlayout
-            pass layout,element,row,column
-            """
-            return grid.addWidget(element,row,col)
+            self.user.get_columns_number()
         
-        def create_btn(self,label,slot):
-            """creats push button with clicked signal
-            pass button label and its slot
-            """
-            btn=QPushButton(label,self)
-            btn.clicked.connect(slot)
-            return btn
+        def default_form(self):
+            self.hide_widget(self.landing_page_form)
+            self.student.set_student_form()
+            self.student.set_form_buttons(self.get_new_data,self.delete_all_data,self.return_home)
+
+        def return_home(self):
+            self.hide_widget(self.student.set_student_form())
+            self.hide_layout(self.student.set_form_buttons())
+            self.Main_window()
+
             
         def pick_db_file(self):
             """sort any file with .db extension from database folder and creates menu widget
@@ -182,44 +155,6 @@ class db_source(QWidget ):
                 self.results.addItem(str(row))
             print("Table presented")
 
-        def cancel_operation(self):
-            try:
-                self.hide_layout(self.user_form)
-                self.hide_layout(self.btn_box)
-            except  TypeError and AttributeError as e:
-                print(e)
-                pass
-            try:
-                self.hide_widget(self.student_form)
-            except  TypeError and AttributeError as e:
-                print(e)
-                pass
-            self.Main_window()
-
-
-        def get_columns(self):
-            """get columns as specified by user
-            """
-            try:
-                columns=self.main_layout.itemAt(2)
-                self.main_layout.removeItem(columns)
-                columns.setGeometry(QRect(0,0,0,0))
-            except:
-                pass
-            finally:
-                self.column_names_form=Form(self)
-                cols=int(self.col_no.text())
-                self.tempo_dict={}
-                columns_names=QFormLayout(self)
-                for i in range(1,cols+1):
-                    col_key=QLineEdit(self)
-                    self.tempo_dict[col_key]=''
-                    columns_names.addRow(QLabel(f"column{i}",self),col_key)
-                self.column_names_form.layout.addLayout(columns_names,0,0)
-
-                create_btn=Pushbutton("create",self,row=1,col=0,row_span=1,col_span=2,click_slot=self.load_user_form)
-                self.column_names_form.add_element(create_btn)
-                self.main_layout.addWidget(self.column_names_form)
 
 #this stores the column name specified by user so to be used later
         def get_user_columns(self):
@@ -257,6 +192,7 @@ class db_source(QWidget ):
         def hide_widget(self,widget):
             self.main_layout.removeWidget(widget)
             widget.hide()
+            widget.setGeometry(QRect(0,0,0,0))
             print("widget hidden")
 
         def hide_layout(self,layout):
